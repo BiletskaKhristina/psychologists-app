@@ -1,0 +1,355 @@
+.home-page {
+    background-color: #FBFBFB;
+    min-height: 100vh;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.home-page::after {
+    content: '';
+    position: absolute;
+    width: 469px;
+    height: 469px;
+    background-color: #54BE96;
+    filter: blur(1000px);
+    top: 468px;
+    left: 1009px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.home-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 128px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+
+.header {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding: 0 128px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(25, 26, 21, 0.1);
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-green {
+    color: #54BE96;
+    font-weight: 700;
+}
+
+.logo-dot {
+    color: #54BE96;
+    font-weight: 500;
+}
+
+.logo-dark {
+    color: #191A15;
+    font-weight: 600;
+    margin-left: 2px;
+}
+
+.nav {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #191A15;
+    font-size: 16px;
+    font-weight: 400;
+    transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #54BE96;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.user-panel {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #191A15;
+}
+
+.login-btn,
+.logout-btn {
+    width: 124px;
+    height: 48px;
+    background: transparent;
+    border: 1px solid rgba(25, 26, 21, 0.2);
+    border-radius: 30px;
+    color: #191A15;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.register-btn {
+    width: 171px;
+    height: 48px;
+    background: #54BE96;
+    border: none;
+    border-radius: 30px;
+    color: #FBFBFB;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 78px;
+}
+
+.hero-text-content {
+    width: 595px;
+}
+
+.hero-title {
+    font-size: 80px;
+    line-height: 82px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #191A15;
+    margin: 0 0 20px 0;
+}
+
+.hero-title-accent {
+    color: #54BE96;
+    font-style: italic;
+}
+
+.hero-description {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+    color: #191A15;
+    width: 510px;
+    margin: 0 0 40px 0;
+}
+
+.get-started-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: #54BE96;
+    color: #FBFBFB;
+    border: none;
+    border-radius: 30px;
+    padding: 18px 50px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.hero-image-wrapper {
+    position: relative;
+    width: 464px;
+}
+
+.image-container {
+    position: relative;
+    width: 464px;
+    height: 526px;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.decor-badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    z-index: 3;
+    color: #fff;
+}
+
+.purple-badge {
+    width: 40px;
+    height: 40px;
+    background: #4535AF;
+    top: 140px;
+    left: -20px;
+    transform: rotate(-15deg);
+}
+
+.yellow-badge {
+    width: 48px;
+    height: 48px;
+    background: #FBC75E;
+    top: 30px;
+    right: -20px;
+    transform: rotate(15deg);
+}
+
+.stats-card {
+    position: absolute;
+    width: 311px;
+    height: 118px;
+    background: #54BE96;
+    border-radius: 20px;
+    left: -101px;
+    top: 333px;
+    display: flex;
+    align-items: center;
+    padding: 32px;
+    box-sizing: border-box;
+    gap: 16px;
+    z-index: 4;
+}
+
+.stats-icon-box {
+    width: 54px;
+    height: 54px;
+    background: #FBFBFB;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #54BE96;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.stats-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stats-label {
+    font-size: 14px;
+    color: rgba(251, 251, 251, 0.5);
+    margin-bottom: 8px;
+}
+
+.stats-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FBFBFB;
+}
+
+.modal-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    color: rgba(25, 26, 21, 0.5);
+    margin: 0 0 40px 0;
+    width: 438px;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.password-field-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.modal-input {
+    width: 438px;
+    height: 52px;
+    border: 1px solid rgba(25, 26, 21, 0.1);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 16px;
+    line-height: 20px;
+    font-family: 'Inter', sans-serif;
+    color: #191A15;
+    outline: none;
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.password-input {
+    padding-right: 50px;
+}
+
+.eye-toggle-btn {
+    position: absolute;
+    right: 18px;
+    top: 26px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #191A15;
+}
+
+.error-msg {
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: 4px;
+}
+
+.modal-submit-btn {
+    width: 438px;
+    height: 52px;
+    background-color: #54BE96;
+    border: none;
+    border-radius: 30px;
+    color: #FBFBFB;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    margin-top: 22px;
+}
