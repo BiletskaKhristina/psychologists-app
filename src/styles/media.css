@@ -1,0 +1,150 @@
+/* ==========================================================
+   АДАПТИВНІСТЬ ДЛЯ МОБІЛЬНИХ ПРИСТРОЇВ ТА ПЛАНШЕТІВ
+   ========================================================== */
+
+/* Запобігання горизонтальному скролу */
+html,
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* 1. Планшети (до 1024px) */
+@media screen and (max-width: 1024px) {
+
+    header,
+    .header,
+    .psychologists-container,
+    .favorites-container,
+    .hero-section {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+}
+
+/* 2. Мобильні пристрої (до 768px) */
+@media screen and (max-width: 768px) {
+
+    /* Шапка */
+    header,
+    .header {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 16px !important;
+        gap: 12px !important;
+        align-items: center !important;
+    }
+
+    nav,
+    .nav,
+    .nav-links {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    .auth-section,
+    .auth-header-section,
+    .user-profile {
+        width: 100% !important;
+        justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* Основний контейнер сторінки */
+    .psychologists-container,
+    .favorites-container {
+        padding: 12px !important;
+        width: 100% !important;
+    }
+
+    /* Картка психолога */
+    .psychologist-card {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 16px !important;
+        gap: 16px !important;
+        width: 100% !important;
+    }
+
+    /* Верхня частина картки (аватар + основні дані) */
+    .psychologist-card-top,
+    .card-header {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 12px !important;
+    }
+
+    /* Аватар */
+    .psychologist-avatar,
+    .card-avatar-wrapper {
+        margin: 0 auto !important;
+    }
+
+    /* Ціна, рейтинг та іконка обраного */
+    .rating-price-wrapper,
+    .card-meta-info {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    /* Список тегів/бейджиків (experience, license тощо) */
+    .tags-list,
+    .badges-container,
+    .psychologist-info-tags {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .tag-item,
+    .badge-item {
+        font-size: 12px !important;
+        padding: 4px 10px !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+
+    /* Фільтри та кнопки */
+    .filter-container,
+    .filter-wrapper {
+        width: 100% !important;
+        margin-bottom: 16px !important;
+    }
+
+    .filter-select,
+    .filter-dropdown-box {
+        width: 100% !important;
+    }
+
+    .load-more-btn {
+        width: 100% !important;
+        margin: 20px auto !important;
+    }
+}
+
+/* 3. Маленькі телефони (до 480px) */
+@media screen and (max-width: 480px) {
+    .psychologist-card {
+        padding: 12px !important;
+        border-radius: 12px !important;
+    }
+
+    .psychologist-name {
+        font-size: 18px !important;
+    }
+}

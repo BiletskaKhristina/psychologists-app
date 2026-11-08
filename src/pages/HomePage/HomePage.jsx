@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase/config';
-import { Modal } from '../../components/Modal/Modal';
+
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema, registerSchema } from '../../schemas/authSchemas';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, X } from 'lucide-react';
 import './HomePage.css';
 
 export const HomePage = () => {
@@ -63,14 +63,27 @@ export const HomePage = () => {
   const onSubmit = async (data) => {
     try {
       if (isRegister) {
+        // Реєстрація нового користувача
         const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
         await updateProfile(userCredential.user, { displayName: data.name });
       } else {
+        // Вхід існуючого користувача
         await signInWithEmailAndPassword(auth, data.email, data.password);
       }
       closeModal();
     } catch (error) {
-      alert('Неправильний email або пароль');
+      // Виводимо конкретну помилку від Firebase у консоль, щоб бачити причину
+      console.error("Auth error:", error.code, error.message);
+
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Цей email вже зареєстрований!');
+      } else if (error.code === 'auth/weak-password') {
+        alert('Пароль занадто слабкий (мінімум 6 символів).');
+      } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+        alert('Неправильний email або пароль.');
+      } else {
+        alert(`Помилка: ${error.message}`);
+      }
     }
   };
 
@@ -146,64 +159,69 @@ export const HomePage = () => {
 
       </div>
 
-      {/* Модальне вікно */}
-      <Modal 
-        isOpen={authModal.isOpen} 
-        onClose={closeModal} 
-        title={isRegister ? 'Registration' : 'Log In'}
-      >
-        <p className="modal-subtitle">
-          {isRegister
-            ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
-            : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.'}
-        </p>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="modal-form">
-          {isRegister && (
-            <div className="modal-field">
-              <input 
-                {...register('name')} 
-                type="text" 
-                placeholder="Name" 
-                className="modal-input" 
-              />
-              {errors.name && <span className="error-msg">{errors.name.message}</span>}
-            </div>
-          )}
-
-          <div className="modal-field">
-            <input 
-              {...register('email')} 
-              type="email" 
-              placeholder="Email" 
-              className="modal-input" 
-            />
-            {errors.email && <span className="error-msg">{errors.email.message}</span>}
-          </div>
-
-          <div className="modal-field password-field-wrapper">
-            <input 
-              {...register('password')} 
-              type={showPassword ? 'text' : 'password'} 
-              placeholder="Password" 
-              className="modal-input password-input" 
-            />
-            <button 
-              type="button" 
-              onClick={() => setShowPassword(!showPassword)}
-              className="eye-toggle-btn"
-              aria-label={showPassword ? "Приховати пароль" : "Показати пароль"}
-            >
-              {showPassword ? <Eye size={20} strokeWidth={2} /> : <EyeOff size={20} strokeWidth={2} />}
+      {/* Вбудоване модальне вікно авторизації */}
+      {authModal.isOpen && (
+        <div className="modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}>
+          <div className="appointment-modal-container" style={{ position: 'relative', width: '500px' }}>
+            <button type="button" className="modal-close-btn" onClick={closeModal}>
+              <X size={20} strokeWidth={2.5} />
             </button>
-            {errors.password && <span className="error-msg">{errors.password.message}</span>}
-          </div>
 
-          <button type="submit" className="modal-submit-btn">
-            {isRegister ? 'Sign Up' : 'Log In'}
-          </button>
-        </form>
-      </Modal>
+            <h2 className="appointment-modal-title">{isRegister ? 'Registration' : 'Log In'}</h2>
+            <p className="appointment-modal-subtitle">
+              {isRegister
+                ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
+                : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.'}
+            </p>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="appointment-form">
+              {isRegister && (
+                <div className="appointment-field">
+                  <input 
+                    {...register('name')} 
+                    type="text" 
+                    placeholder="Name" 
+                    className="appointment-input" 
+                  />
+                  {errors.name && <span className="appointment-error">{errors.name.message}</span>}
+                </div>
+              )}
+
+              <div className="appointment-field">
+                <input 
+                  {...register('email')} 
+                  type="email" 
+                  placeholder="Email" 
+                  className="appointment-input" 
+                />
+                {errors.email && <span className="appointment-error">{errors.email.message}</span>}
+              </div>
+
+              <div className="appointment-field" style={{ position: 'relative' }}>
+                <input 
+                  {...register('password')} 
+                  type={showPassword ? 'text' : 'password'} 
+                  placeholder="Password" 
+                  className="appointment-input" 
+                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '16px', top: '16px', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                  aria-label={showPassword ? "Приховати пароль" : "Показати пароль"}
+                >
+                  {showPassword ? <Eye size={20} strokeWidth={2} /> : <EyeOff size={20} strokeWidth={2} />}
+                </button>
+                {errors.password && <span className="appointment-error">{errors.password.message}</span>}
+              </div>
+
+              <button type="submit" className="appointment-submit-btn">
+                {isRegister ? 'Sign Up' : 'Log In'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
