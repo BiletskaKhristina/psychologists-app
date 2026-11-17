@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Star, Heart } from 'lucide-react';
 import { ref, get } from 'firebase/database';
-import { db } from '../../firebase/config';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { db, auth } from '../../firebase/config';
 import { AppointmentModal } from '../../components/AppointmentModal/AppointmentModal';
 import '../PsychologistsPage/PsychologistsPage.css';
 
 export const FavoritesPage = () => {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
   const [psychologists, setPsychologists] = useState([]);
   const [favorites, setFavorites] = useState({});
   const [expandedCards, setExpandedCards] = useState({});
@@ -27,6 +29,22 @@ export const FavoritesPage = () => {
     'Popular',
     'Not popular'
   ];
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchFavoritesData = async () => {
@@ -74,7 +92,6 @@ export const FavoritesPage = () => {
     setVisibleCount((prev) => prev + 3);
   };
 
-  // Жорстка фільтрація: залишаємо тільки ті картки, де favorites[item.id] === true
   let favoritePsychologists = psychologists.filter((item) => favorites[item.id] === true);
 
   if (selectedFilter === 'A to Z') {
@@ -92,6 +109,8 @@ export const FavoritesPage = () => {
   }
 
   const displayedFavorites = favoritePsychologists.slice(0, visibleCount);
+
+  const displayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Користувач';
 
   return (
     <div className="psychologists-page">
@@ -121,9 +140,9 @@ export const FavoritesPage = () => {
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
               </div>
-              <span className="user-fullname">Христина</span>
+              <span className="user-fullname">{displayName}</span>
             </div>
-            <button className="logout-action-btn" onClick={() => navigate('/')}>Log out</button>
+            <button className="logout-action-btn" onClick={handleLogout}>Log out</button>
           </div>
         </header>
 

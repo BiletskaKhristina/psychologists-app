@@ -182,3 +182,249 @@
     border-right-color: var(--border);
   }
 }
+/* Планшети (до 1024px) */
+@media screen and (max-width: 1024px) {
+
+  .psychologists-container,
+  .home-container,
+  .favorites-container {
+    padding: 0 16px;
+  }
+
+  .nav {
+    gap: 20px;
+  }
+}
+
+/* Планшети та великі телефони (до 768px) */
+@media screen and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 16px 0;
+  }
+
+  .nav {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .auth-header-section {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Переводимо картку в колонку для компактності */
+  .psychologist-card {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .card-avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .card-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-meta-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .badges-grid {
+    grid-template-columns: 1fr;
+    /* Один стовпчик бейджів на мобільних */
+  }
+
+  .appointment-modal-container {
+    padding: 24px 20px;
+    border-radius: 20px;
+    max-height: 95vh;
+  }
+}
+
+/* ==========================================
+   АДАПТИВНІ БРЕЙКПОЇНТИ ТА СТИЛІ ЕКРАНІВ
+   ========================================== */
+
+/* Планшети та менші екрани (до 1024px) */
+@media screen and (max-width: 1024px) {
+
+  .psychologists-container,
+  .home-container,
+  .favorites-container {
+    padding: 0 16px;
+  }
+
+  .nav {
+    gap: 20px;
+  }
+
+  #center {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+
+  #next-steps {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #next-steps>div {
+    padding: 24px 20px;
+  }
+
+  #docs {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #next-steps ul {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #next-steps ul li {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  #next-steps ul a {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  #spacer {
+    height: 48px;
+  }
+}
+
+/* Великі смартфони та планшети у портретній орієнтації (до 768px) */
+@media screen and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 16px 0;
+    gap: 16px;
+  }
+
+  .nav {
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .auth-header-section {
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Переводимо картку психолога в вертикальну колонку для компактності */
+  .psychologist-card {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .card-avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .card-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .card-meta-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .badges-grid {
+    grid-template-columns: 1fr;
+    /* Один стовпчик бейджів на мобільних */
+  }
+
+  .appointment-modal-container {
+    padding: 24px 20px;
+    border-radius: 20px;
+    max-height: 95vh;
+    width: 90% !important;
+    /* Щоб модалка не прилипала до країв екрана */
+  }
+}
+
+/* Маленькі мобільні пристрої (320px — 480px) */
+@media screen and (max-width: 480px) {
+
+  .psychologists-container,
+  .home-container,
+  .favorites-container {
+    padding: 0 10px;
+  }
+
+  .header {
+    gap: 12px;
+  }
+
+  .nav {
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .auth-header-section {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .user-profile-badge,
+  .logout-action-btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .card-rating-price {
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .meta-divider {
+    display: none;
+    /* Ховаємо вертикальну лінію між рейтингом і ціною на мікро-екранах */
+  }
+
+  /* Повне підлаштування модалок для найменших екранів (від 320px) */
+  .appointment-modal-container {
+    padding: 20px 12px;
+    border-radius: 16px;
+    width: 95% !important;
+  }
+
+  .appointment-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

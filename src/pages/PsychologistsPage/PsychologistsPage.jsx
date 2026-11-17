@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, Heart } from 'lucide-react';
+import { Star, Heart, X, Eye, EyeOff } from 'lucide-react';
 import { ref, get } from 'firebase/database';
-import { db } from '../../firebase/config';
+import { 
+  onAuthStateChanged, 
+  signOut, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  updateProfile 
+} from 'firebase/auth';
+import { db, auth } from '../../firebase/config';
 import { AppointmentModal } from '../../components/AppointmentModal/AppointmentModal';
 import './PsychologistsPage.css';
 
 export const PsychologistsPage = () => {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
   const [psychologists, setPsychologists] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,6 +26,14 @@ export const PsychologistsPage = () => {
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [selectedPsychologist, setSelectedPsychologist] = useState(null);
 
+  // Стани для вбудованої модалки авторизації та її полів
+  const [authModal, setAuthModal] = useState({ isOpen: false, isRegister: false });
+  const [showPassword, setShowPassword] = useState(false);
+  const [modalEmail, setModalEmail] = useState('');
+  const [modalPassword, setModalPassword] = useState('');
+  const [modalName, setModalName] = useState('');
+  const [authError, setAuthError] = useState('');
+
   const filterOptions = [
     'Show all',
     'A to Z',
@@ -27,6 +43,23 @@ export const PsychologistsPage = () => {
     'Popular',
     'Not popular'
   ];
+
+  // Слідкуємо за станом авторизації у Firebase
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchPsychologists = async () => {
@@ -65,11 +98,44 @@ export const PsychologistsPage = () => {
   };
 
   const toggleFavorite = (id) => {
+    if (!currentUser) {
+      setAuthModal({ isOpen: true, isRegister: false });
+      return;
+    }
+
     setFavorites((prev) => {
       const updated = { ...prev, [id]: !prev[id] };
       localStorage.setItem('psychologists_favorites', JSON.stringify(updated));
       return updated;
     });
+  };
+
+  // Обробник сабміту форми входу / реєстрації у Firebase
+  const handleAuthSubmit = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+
+    try {
+      if (authModal.isRegister) {
+        // Реєстрація нового користувача
+        const userCredential = await createUserWithEmailAndPassword(auth, modalEmail, modalPassword);
+        if (modalName) {
+          await updateProfile(userCredential.user, { displayName: modalName });
+        }
+      } else {
+        // Логін існуючого користувача
+        await signInWithEmailAndPassword(auth, modalEmail, modalPassword);
+      }
+
+      // Очищення полів та закриття модалки при успіху
+      setAuthModal({ isOpen: false, isRegister: false });
+      setModalEmail('');
+      setModalPassword('');
+      setModalName('');
+    } catch (error) {
+      console.error('Auth error:', error);
+      setAuthError(error.message);
+    }
   };
 
   const handleLoadMore = () => {
@@ -92,6 +158,7 @@ export const PsychologistsPage = () => {
   }
 
   const displayedPsychologists = filteredPsychologists.slice(0, visibleCount);
+  const displayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Користувач';
 
   return (
     <div className="psychologists-page">
@@ -114,16 +181,27 @@ export const PsychologistsPage = () => {
           </nav>
 
           <div className="auth-header-section">
-            <div className="user-profile-badge">
-              <div className="user-icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FBFBFB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </div>
-              <span className="user-fullname">Христина</span>
-            </div>
-            <button className="logout-action-btn" onClick={() => navigate('/')}>Log out</button>
+            {currentUser ? (
+              <>
+                <div className="user-profile-badge">
+                  <div className="user-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FBFBFB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <span className="user-fullname">{displayName}</span>
+                </div>
+                <button className="logout-action-btn" onClick={handleLogout}>Log out</button>
+              </>
+            ) : (
+              <button 
+                className="logout-action-btn" 
+                onClick={() => setAuthModal({ isOpen: true, isRegister: false })}
+              >
+                Log in
+              </button>
+            )}
           </div>
         </header>
 
@@ -279,6 +357,83 @@ export const PsychologistsPage = () => {
         onClose={() => setIsAppointmentOpen(false)}
         psychologist={selectedPsychologist}
       />
+
+      {/* Робоче модальне вікно авторизації з Firebase */}
+      {authModal.isOpen && (
+        <div className="modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) setAuthModal({ ...authModal, isOpen: false }); }}>
+          <div className="appointment-modal-container" style={{ position: 'relative', width: '500px' }}>
+            <button type="button" className="modal-close-btn" onClick={() => setAuthModal({ ...authModal, isOpen: false })}>
+              <X size={20} strokeWidth={2.5} />
+            </button>
+
+            <h2 className="appointment-modal-title">{authModal.isRegister ? 'Registration' : 'Log In'}</h2>
+            <p className="appointment-modal-subtitle">
+              {authModal.isRegister
+                ? 'Thank you for your interest in our platform! In order to register, we need some information. Please provide us with the following information.'
+                : 'Welcome back! Please enter your credentials to access your account and continue your search for a psychologist.'}
+            </p>
+
+            {authError && <div style={{ color: '#ef4444', marginBottom: '16px', fontSize: '14px' }}>{authError}</div>}
+
+            <form onSubmit={handleAuthSubmit} className="appointment-form">
+              {authModal.isRegister && (
+                <div className="appointment-field">
+                  <input 
+                    type="text" 
+                    placeholder="Name" 
+                    value={modalName}
+                    onChange={(e) => setModalName(e.target.value)}
+                    className="appointment-input" 
+                    required={authModal.isRegister}
+                  />
+                </div>
+              )}
+
+              <div className="appointment-field">
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  value={modalEmail}
+                  onChange={(e) => setModalEmail(e.target.value)}
+                  className="appointment-input" 
+                  required
+                />
+              </div>
+
+              <div className="appointment-field" style={{ position: 'relative' }}>
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  placeholder="Password" 
+                  value={modalPassword}
+                  onChange={(e) => setModalPassword(e.target.value)}
+                  className="appointment-input" 
+                  required
+                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '16px', top: '16px', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                  aria-label={showPassword ? "Приховати пароль" : "Показати пароль"}
+                >
+                  {showPassword ? <Eye size={20} strokeWidth={2} /> : <EyeOff size={20} strokeWidth={2} />}
+                </button>
+              </div>
+
+              <button type="submit" className="appointment-submit-btn">
+                {authModal.isRegister ? 'Sign Up' : 'Log In'}
+              </button>
+            </form>
+
+            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '14px' }}>
+              {authModal.isRegister ? (
+                <span>Already have an account? <button type="button" onClick={() => setAuthModal({ ...authModal, isRegister: false })} style={{ background: 'none', border: 'none', color: '#54BE96', cursor: 'pointer', fontWeight: 'bold' }}>Log in</button></span>
+              ) : (
+                <span>Don't have an account? <button type="button" onClick={() => setAuthModal({ ...authModal, isRegister: true })} style={{ background: 'none', border: 'none', color: '#54BE96', cursor: 'pointer', fontWeight: 'bold' }}>Register</button></span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

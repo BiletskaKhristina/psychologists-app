@@ -569,3 +569,98 @@
 .load-more-btn:hover {
     opacity: 0.9;
 }
+/* Планшети (до 1024px) */
+@media screen and (max-width: 1024px) {
+    .psychologists-container {
+        padding: 0 16px;
+    }
+
+    .nav {
+        gap: 20px;
+    }
+}
+
+/* Планшети та великі мобільні (до 768px) */
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 32px;
+        padding: 16px 0;
+    }
+
+    .nav {
+        gap: 16px;
+    }
+
+    /* Перетворюємо картку психолога на вертикальну колонку для мобільних */
+    .psychologist-card {
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .card-avatar-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .badges-grid {
+        grid-template-columns: 1fr;
+        /* На вузьких екранах бейджі в один стовпчик */
+    }
+
+    .appointment-modal-container {
+        padding: 24px 20px;
+        border-radius: 20px;
+    }
+}
+
+/* Маленькі мобільні пристрої (від 320px до 480px) */
+@media screen and (max-width: 480px) {
+    .psychologists-container {
+        padding: 0 12px;
+    }
+
+    .header {
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .nav {
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .auth-header-section {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .logout-action-btn,
+    .user-profile-badge {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .card-top-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .card-meta-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Модалки на весь екран з невеликим відступом на 320px */
+    .appointment-modal-container {
+        padding: 20px 16px;
+        max-height: 95vh;
+    }
+
+    .appointment-modal-title {
+        font-size: 24px !important;
+    }
+}
