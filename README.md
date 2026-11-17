@@ -92,5 +92,5 @@ src/
 
 ## 🔗 Посилання на проєкт
 
-- **Live Page (Deployed):** [Посилання на задеплоєний сайт]() _(тут буде твоє посилання з Vercel / Netlify)_
-- **GitHub Repository:** [Посилання на репозиторій](https://github.0com/your-username/your-repo-name)
+- **Live Page (Deployed):** [Посилання на задеплоєний сайт](https://psychologists-app-mu.vercel.app/) _(тут буде твоє посилання з Vercel / Netlify)_
+- **GitHub Repository:** [Посилання на репозиторій](https://github.com/BiletskaKhristina/psychologists-app.git)
